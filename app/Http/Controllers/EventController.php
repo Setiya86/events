@@ -51,5 +51,4 @@ class EventController extends Controller
 
         return view('admin.events.show', compact('event'));
     }
-
 }
