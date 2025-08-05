@@ -26,10 +26,13 @@
                 <i class="fas fa-users {{ request()->routeIs('partisipan.summary') ? 'text-cyan-600' : 'text-gray-500' }}"></i>
                 Participants
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 text-gray-700 font-medium">
-                <i class="fas fa-qrcode text-gray-500"></i>
-                QR Scan
-            </a>
+            <a href="{{ route('admin.scan.qr') }}" 
+                class="flex items-center gap-2 px-3 py-2 rounded font-medium 
+                        {{ request()->routeIs('admin.scan.qr') ? 'bg-cyan-100 text-cyan-700' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <i class="fas fa-qrcode {{ request()->routeIs('admin.scan.qr') ? 'text-cyan-600' : 'text-gray-500' }}"></i>
+                    QR Scan
+                </a>
+
         </nav>
     </div>
 

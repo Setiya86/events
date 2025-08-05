@@ -57,9 +57,18 @@ class SubmitController extends Controller
         return redirect()->route('partisipan.event.qrcode', ['submission' => $submission->id]);
     }
 
+    // public function showQr(EventSubmission $submission)
+    // {
+    //     $qr = QrCode::size(300)->generate(route('absen.checkin', ['token' => $submission->token]));
+    //     return view('partisipan.event.qrcode', compact('submission', 'qr'));
+    // }
+
     public function showQr(EventSubmission $submission)
     {
-        $qr = QrCode::size(300)->generate(route('absen.checkin', ['token' => $submission->token]));
+        $checkinUrl = config('app.url') . route('absen.checkin', ['token' => $submission->token], false);
+
+        $qr = \QrCode::size(300)->generate($checkinUrl);
         return view('partisipan.event.qrcode', compact('submission', 'qr'));
     }
+
 }

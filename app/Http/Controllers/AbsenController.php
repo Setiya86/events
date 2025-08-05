@@ -12,6 +12,7 @@ class AbsenController extends Controller
 
         if ($submission->is_present) {
             return view('absen.already_checked_in');
+
         }
 
         $submission->update(['is_present' => true]);

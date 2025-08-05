@@ -19,6 +19,12 @@ Route::get('/admin/dashboard', function () {
 })->middleware('auth')->name('admin.dashboard');
 
 
+// routes/web.php
+Route::get('/admin/scan-qr', function () {
+    return view('admin.scan'); // file scan.blade.php
+})->name('admin.scan.qr')->middleware('auth');
+
+
 Route::middleware('auth')->group(function() {
     Route::get('/admin/events', [EventController::class, 'index'])->name('events.index');
     Route::get('/admin/partisipan/summary', [PartisipanControler::class, 'showSummary'])->name('partisipan.summary');

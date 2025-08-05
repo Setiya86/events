@@ -21,7 +21,7 @@
 </div>
 
 <!-- Event List -->
-<div class="bg-white rounded-lg shadow p-6">
+<div class="p-4">
     <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-bold text-gray-700">Upcoming Events</h3>
         <a href="{{ route('events.create') }}" 
