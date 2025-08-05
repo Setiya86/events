@@ -1,7 +1,6 @@
-<aside class="w-64 bg-white shadow-lg hidden md:flex flex-col justify-between">
+<aside class="flex flex-col justify-between h-full bg-white shadow-xl">
     <!-- Bagian atas -->
     <div>
-        <!-- Logo -->
         <div class="p-1 flex justify-center top-18 -mt-14">
             <img src="{{ asset('img/logos.png') }}" 
                  alt="Logo" 
@@ -32,7 +31,6 @@
                     <i class="fas fa-qrcode {{ request()->routeIs('admin.scan.qr') ? 'text-cyan-600' : 'text-gray-500' }}"></i>
                     QR Scan
                 </a>
-
         </nav>
     </div>
 

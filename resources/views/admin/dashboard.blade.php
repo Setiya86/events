@@ -20,15 +20,5 @@
     </div>
 </div>
 
-<!-- Event List -->
-<div class="p-4">
-    <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold text-gray-700">Upcoming Events</h3>
-        <a href="{{ route('events.create') }}" 
-           class="bg-cyan-500 text-white px-4 py-2 rounded hover:bg-cyan-600">
-           + New Event
-        </a>
-    </div>
-    @include('admin.events.table')
-</div>
+
 @endsection

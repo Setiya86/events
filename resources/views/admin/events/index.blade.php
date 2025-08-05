@@ -10,7 +10,7 @@
         </h2>
         <a href="{{ route('events.create') }}" 
            class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 flex items-center gap-2">
-            <i class="fas fa-plus"></i> Create Event
+            <i class="fas fa-plus"></i> New Event
         </a>
     </div>
 
@@ -39,8 +39,12 @@
                                         <li>
                                             <strong>{{ $field->label }}</strong> 
                                             <span class="text-gray-500">({{ ucfirst($field->type) }})</span>
-                                            @if($field->options)
-                                                <span class="text-gray-400">[{{ $field->options }}]</span>
+                                            
+                                            {{-- Tampilkan options jika ada --}}
+                                            @if(!empty($field->options) && is_array($field->options))
+                                                <span class="text-gray-400">
+                                                    [{{ implode(', ', $field->options) }}]
+                                                </span>
                                             @endif
                                         </li>
                                     @endforeach

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EventField extends Model
 {
-    protected $fillable = ['event_id', 'label', 'type', 'options'];
+    protected $fillable = ['event_id', 'label', 'type', 'options',];
 
     protected $casts = [
         'options' => 'array',

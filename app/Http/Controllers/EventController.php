@@ -19,31 +19,43 @@ class EventController extends Controller
         return view('admin.events.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title'      => 'required|string',
-            'event_date' => 'required|date',
-            'fields'     => 'required|array',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'title'      => 'required|string',
+        'category'   => 'required|string', // kategori wajib
+        'event_date' => 'required|date',
+        'poster'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        'fields'     => 'required|array',
+    ]);
 
-        $event = Event::create([
-            'title'       => $request->title,
-            'description' => $request->description,
-            'event_date'  => $request->event_date,
-        ]);
-
-        foreach ($request->fields as $field) {
-            EventField::create([
-                'event_id' => $event->id,
-                'label'    => $field['label'],
-                'type'     => $field['type'],
-                'options'  => $field['options'] ?? null,
-            ]);
-        }
-
-        return redirect()->route('admin.dashboard')->with('success', 'Event created successfully');
+    // Upload poster
+    $posterPath = null;
+    if ($request->hasFile('poster')) {
+        $posterPath = $request->file('poster')->store('posters', 'public');
     }
+
+    $event = Event::create([
+        'title'       => $request->title,
+        'category'    => $request->category,
+        'description' => $request->description,
+        'event_date'  => $request->event_date,
+        'poster'      => $posterPath,
+    ]);
+
+    foreach ($request->fields as $field) {
+        EventField::create([
+            'event_id' => $event->id,
+            'label'    => $field['label'],
+            'type'     => $field['type'],
+            // Simpan langsung array, biar casts handle JSON
+            'options'  => !empty($field['options']) ? explode(',', $field['options']) : null,
+        ]);
+    }
+
+    return redirect()->route('admin.dashboard')->with('success', 'Event created successfully');
+}
+
 
     public function show($id)
     {

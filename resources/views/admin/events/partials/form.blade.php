@@ -1,100 +1,119 @@
-<form action="{{ route('events.store') }}" method="POST" id="eventForm" class="space-y-5">
+<form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" id="eventForm" class="space-y-5 overflow-y-auto">
     @csrf
     
     <!-- Event Title -->
     <div>
-        <label class="block mb-1 font-semibold text-gray-700">
-            <i class="fas fa-heading mr-2 text-cyan-600"></i> Event Title
-        </label>
-        <input type="text" name="title" 
-               class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-               placeholder="Enter event title" required>
+        <label class="block mb-1 font-semibold text-gray-700">Event Title</label>
+        <input type="text" name="title" class="w-full border rounded-lg p-3" required>
     </div>
-    
+
+    <!-- Category -->
+    <div>
+        <label class="block mb-1 font-semibold text-gray-700">Category</label>
+        <select name="category" class="w-full border rounded-lg p-3" required>
+            <option value="">-- Select Category --</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Kompetisi">Kompetisi</option>
+            <option value="Lomba">Lomba</option>
+            <option value="Pelatihan">Pelatihan</option>
+        </select>
+    </div>
+
+    <!-- Poster -->
+    <div>
+        <label class="block mb-1 font-semibold text-gray-700">Event Poster</label>
+        <input type="file" name="poster" accept="image/*" id="posterInput" class="w-full border rounded-lg p-3">
+        <img id="posterPreview" class="mt-3 max-h-48 rounded-lg shadow hidden" alt="Preview Poster">
+    </div>
+
     <!-- Description -->
     <div>
-        <label class="block mb-1 font-semibold text-gray-700">
-            <i class="fas fa-align-left mr-2 text-cyan-600"></i> Description
-        </label>
-        <textarea name="description" 
-                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-                  placeholder="Write a short description"></textarea>
+        <label class="block mb-1 font-semibold text-gray-700">Description</label>
+        <textarea name="description" class="w-full border rounded-lg p-3"></textarea>
     </div>
-    
+
     <!-- Event Date -->
     <div>
-        <label class="block mb-1 font-semibold text-gray-700">
-            <i class="fas fa-calendar-alt mr-2 text-cyan-600"></i> Event Date
-        </label>
-        <input type="date" name="event_date" 
-               class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-               required>
+        <label class="block mb-1 font-semibold text-gray-700">Event Date</label>
+        <input type="date" name="event_date" class="w-full border rounded-lg p-3" required>
     </div>
 
     <!-- Dynamic Fields -->
     <div id="fieldsContainer" class="space-y-3"></div>
 
     <!-- Add Field Button -->
-    <button type="button" id="addField" 
-            class="w-full flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-        <i class="fas fa-plus"></i> Add Custom Field
+    <button type="button" id="addField" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg">
+        + Add Custom Field
     </button>
 
     <!-- Submit -->
-    <button type="submit" 
-            class="w-full flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-        <i class="fas fa-save"></i> Save Event
+    <button type="submit" class="w-full bg-green-500 text-white px-4 py-2 rounded-lg">
+        Save Event
     </button>
 </form>
 
-<!-- Script -->
 <script>
+    // Poster Preview
+    document.getElementById('posterInput').addEventListener('change', function(e) {
+        const preview = document.getElementById('posterPreview');
+        const file = e.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+        } else {
+            preview.classList.add('hidden');
+        }
+    });
+
+    // Dynamic Fields
     let fieldsContainer = document.getElementById('fieldsContainer');
     let addFieldBtn = document.getElementById('addField');
     let fieldIndex = 0;
 
     addFieldBtn.addEventListener('click', () => {
         let fieldHTML = `
-            <div class="border border-gray-200 p-4 rounded-lg bg-gray-50 shadow-sm transform transition-all duration-300">
-                <label class="block mb-1 font-semibold text-gray-700">
-                    <i class="fas fa-tag mr-2 text-cyan-600"></i> Field Label
-                </label>
-                <input type="text" name="fields[${fieldIndex}][label]" 
-                       class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-                       placeholder="Enter label" required>
+            <div class="relative border p-4 rounded-lg bg-gray-50 shadow-sm" data-field="${fieldIndex}">
+                <!-- Tombol hapus -->
+                <button type="button" onclick="removeField(${fieldIndex})" 
+                        class="absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg font-bold">✖</button>
+                
+                <label>Field Label</label>
+                <input type="text" name="fields[${fieldIndex}][label]" class="w-full border rounded p-2" required>
 
-                <label class="block mt-3 mb-1 font-semibold text-gray-700">
-                    <i class="fas fa-list mr-2 text-cyan-600"></i> Field Type
-                </label>
-                <select name="fields[${fieldIndex}][type]" 
-                        class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition fieldType" required>
+                <label class="mt-2 block">Field Type</label>
+                <select name="fields[${fieldIndex}][type]" class="w-full border rounded p-2 fieldType">
                     <option value="text">Text</option>
+                    <option value="email">Email</option>
                     <option value="number">Number</option>
                     <option value="date">Date</option>
-                    <option value="select">Select (Dropdown)</option>
+                    <option value="textarea">Textarea</option>
+                    <option value="radio">Radio</option>
+                    <option value="checkbox">Checkbox</option>
+                    <option value="select">Select</option>
                 </select>
 
-                <div class="optionsContainer mt-3 hidden">
-                    <label class="block mb-1 font-semibold text-gray-700">
-                        <i class="fas fa-list-ul mr-2 text-cyan-600"></i> Options (comma separated)
-                    </label>
-                    <input type="text" name="fields[${fieldIndex}][options]" 
-                           class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" 
-                           placeholder="Option1, Option2, Option3">
+                <div class="optionsContainer mt-2 hidden">
+                    <label>Options (comma separated)</label>
+                    <input type="text" name="fields[${fieldIndex}][options]" class="w-full border rounded p-2" placeholder="Option1,Option2">
                 </div>
             </div>
         `;
         fieldsContainer.insertAdjacentHTML('beforeend', fieldHTML);
 
-        let typeSelect = fieldsContainer.querySelector(`select[name="fields[${fieldIndex}][type]"]`);
-        let optionsContainer = fieldsContainer.querySelectorAll(`.optionsContainer`)[fieldIndex];
+        let typeSelect = fieldsContainer.querySelectorAll('.fieldType')[fieldIndex];
+        let optionsContainer = fieldsContainer.querySelectorAll('.optionsContainer')[fieldIndex];
+        
         typeSelect.addEventListener('change', () => {
-            optionsContainer.classList.toggle('hidden', typeSelect.value !== 'select');
+            let showOptions = ['radio', 'checkbox', 'select'].includes(typeSelect.value);
+            optionsContainer.classList.toggle('hidden', !showOptions);
         });
 
         fieldIndex++;
     });
-</script>
 
-<!-- Font Awesome CDN -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    function removeField(index) {
+        let field = fieldsContainer.querySelector(`[data-field="${index}"]`);
+        if (field) field.remove();
+    }
+</script>
