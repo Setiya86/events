@@ -60,18 +60,17 @@
                                 title="View">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="#" 
+                                <a href="{{ route('events.edit', $event->id) }}" 
                                    class="text-green-500 hover:text-green-700" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="#" method="POST" 
-                                      onsubmit="return confirm('Are you sure?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <!-- Tombol Delete dengan Modal -->
+                                <button type="button" 
+                                        class="text-red-500 hover:text-red-700" 
+                                        title="Delete"
+                                        onclick="openDeleteModal({{ $event->id }}, '{{ $event->title }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -84,4 +83,42 @@
         </table>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Hapus -->
+<div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-black/50 hidden">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Konfirmasi Hapus</h2>
+        <p class="text-gray-600 mb-6">
+            Apakah Anda yakin ingin menghapus event 
+            <span id="eventTitle" class="font-semibold text-red-500"></span>?
+        </p>
+
+        <div class="flex justify-end gap-3">
+            <button onclick="closeDeleteModal()" 
+                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                Batal
+            </button>
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" 
+                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                    Hapus
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(eventId, eventTitle) {
+        document.getElementById('eventTitle').textContent = eventTitle;
+        document.getElementById('deleteForm').action = `/admin/events/${eventId}`;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
 @endsection
