@@ -1,8 +1,8 @@
 <nav class="bg-white shadow-inner  border-b-4 border-gray-600 shadow-lg dark:bg-gray-900">
   <div class="max-w-screen-s flex flex-wrap items-center justify-between mx-auto p-2">
     <!-- logo -->
-    <a href="#" class="w-40 max-w-md h-10 overflow-hidden rounded-lg flex items-center">
-      <img src="{{ asset('img/logos.png') }}" alt="Logo" class="w-full h-20 object-cover" />
+    <a href="{{ route('partisipan.home') }}" class="w-40 max-w-md h-10 overflow-hidden rounded-lg flex items-center">
+      <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-full h-20 object-contain" />
     </a>
 
     <!-- searchbar kanan -->

@@ -7,7 +7,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-    <title>@yield('title', 'UNJAYA Event')</title>
+    <title>@yield('title', 'EventX')</title>
 </head>
 <body class="@yield('bodyClass', 'bg-blue-900 min-h-screen')">
     <!-- -- Navbar -- -->

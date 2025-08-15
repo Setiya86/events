@@ -2,7 +2,7 @@
     <!-- Bagian atas -->
     <div>
         <div class="p-1 flex justify-center top-18 -mt-14">
-            <img src="{{ asset('img/logos.png') }}" 
+            <img src="{{ asset('img/logo.png') }}" 
                  alt="Logo" 
                  class="max-h-50 w-auto object-contain">
         </div>
